@@ -3,8 +3,8 @@ package model;
 public class Order {
 
     private static int globalCounter = 0;
-    private int id;
-    private int clientId;
+    private final int id;
+    private final int clientId;
 
     public Order(int clientId) {
         this.id = ++globalCounter;

@@ -2,13 +2,15 @@ package controller;
 
 import model.DeliveryArea;
 import model.Order;
+import util.Log;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Waiter implements Runnable{
+public class Waiter implements Runnable, Stoppable{
 
-    private int id;
-    private DeliveryArea deliveryArea;
+    private final int id;
+    private final DeliveryArea deliveryArea;
+    private volatile boolean running = true;
 
     public Waiter(int id, DeliveryArea deliveryArea) {
         this.id = id;
@@ -17,15 +19,24 @@ public class Waiter implements Runnable{
 
     public void run () {
         try {
-            while (true) {
-                System.out.println("Waiter " + id + " está esperando por pedidos listos...");
+            while (running) {
+                Log.print("Waiter " + id + " está esperando por pedidos listos...");
                 Order o = deliveryArea.takeOrder();
-                System.out.println("Waiter " + id + " entregó el pedido " + o.getId() + " del cliente " + o.getClientId());
+                Log.print("Waiter " + id + " entregó el pedido " + o.getId() + " del cliente " + o.getClientId());
                 Thread.sleep(ThreadLocalRandom.current().nextInt(1000, 15000));
             }
+            Log.print("Mesero " + id + " ha dejado de trabajar.");
         } catch (InterruptedException e) {
+            Log.print("Mesero " + id + " ha sido interrumpido.");
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void stopThread() {
+        running = false;
+    }
+
+    public int getId() { return id; }
 
 }

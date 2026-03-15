@@ -28,3 +28,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+KitchenSimulator.iml
+
+.idea/
