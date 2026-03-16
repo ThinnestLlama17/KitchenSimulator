@@ -1,4 +1,4 @@
-package model;
+package model.resources;
 
 public class Order {
 

@@ -1,8 +1,12 @@
 package controller;
 
-import model.DeliveryArea;
-import model.OrderQueue;
+import model.resources.DeliveryArea;
+import model.resources.OrderQueue;
+import model.threads.Chef;
+import model.threads.Client;
+import model.threads.Waiter;
 import util.Log;
+import util.Stoppable;
 
 import java.util.ArrayList;
 import java.util.List;

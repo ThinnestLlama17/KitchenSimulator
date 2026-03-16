@@ -1,12 +1,13 @@
-package controller;
+package model.threads;
 
-import model.Order;
-import model.OrderQueue;
+import util.Stoppable;
+import model.resources.Order;
+import model.resources.OrderQueue;
 import util.Log;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Client implements Runnable, Stoppable{
+public class Client implements Runnable, Stoppable {
 
     private final int id;
     private final OrderQueue orderQueue;

@@ -1,8 +1,9 @@
-package controller;
+package model.threads;
 
-import model.DeliveryArea;
-import model.Order;
-import model.OrderQueue;
+import util.Stoppable;
+import model.resources.DeliveryArea;
+import model.resources.Order;
+import model.resources.OrderQueue;
 import util.Log;
 
 import java.util.concurrent.ThreadLocalRandom;

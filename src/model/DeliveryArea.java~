@@ -1,5 +1,6 @@
-package model;
+package model.queues;
 
+import model.Order;
 import util.Log;
 
 import java.util.concurrent.LinkedBlockingQueue;

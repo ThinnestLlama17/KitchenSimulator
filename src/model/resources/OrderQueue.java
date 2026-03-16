@@ -1,4 +1,4 @@
-package model;
+package model.resources;
 
 import util.Log;
 

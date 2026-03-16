@@ -1,12 +1,13 @@
-package controller;
+package model.threads;
 
-import model.DeliveryArea;
-import model.Order;
+import util.Stoppable;
+import model.resources.DeliveryArea;
+import model.resources.Order;
 import util.Log;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Waiter implements Runnable, Stoppable{
+public class Waiter implements Runnable, Stoppable {
 
     private final int id;
     private final DeliveryArea deliveryArea;
