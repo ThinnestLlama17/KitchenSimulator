@@ -11,7 +11,11 @@ import util.Stoppable;
 import java.util.ArrayList;
 import java.util.List;
 
+import view.SimulationView;
+
 public class SimulationController {
+
+    SimulationView view;
 
     private final List<Stoppable> clients = new ArrayList<>();
     private final List<Thread> clientThreads = new ArrayList<>();
@@ -25,6 +29,9 @@ public class SimulationController {
     private final OrderQueue orderQueue;
     private final DeliveryArea deliveryArea;
 
+    private volatile int minArrival = 1000;
+    private volatile int maxArrival = 5000;
+
     public SimulationController(int orderQueueCapacity, int deliveryAreaCapacity) {
         orderQueue = new OrderQueue(orderQueueCapacity);
         deliveryArea = new DeliveryArea(deliveryAreaCapacity);
@@ -36,17 +43,17 @@ public class SimulationController {
 
 
     public void addClient() {
-        Client client = new Client(clients.size() + 1, orderQueue);
+        Client client = new Client(clients.size() + 1, orderQueue, this);
         startThread(client, clients, clientThreads, "Client-" + client.getId());
     }
 
     public void addChef() {
-        Chef chef = new Chef(chefs.size() + 1, orderQueue, deliveryArea);
+        Chef chef = new Chef(chefs.size() + 1, orderQueue, deliveryArea, this);
         startThread(chef, chefs, chefThreads, "Chef-" + chef.getId());
     }
 
     public void addWaiter() {
-        Waiter waiter = new Waiter(waiters.size() + 1, deliveryArea);
+        Waiter waiter = new Waiter(waiters.size() + 1, deliveryArea, this);
         startThread(waiter, waiters, waiterThreads, "Waiter-" + waiter.getId());
     }
 
@@ -65,7 +72,7 @@ public class SimulationController {
         if (!list.isEmpty()) {
             Stoppable obj = list.remove(0);
             Thread thread = threads.remove(0);
-            Log.print("🔹 Deteniendo " + type + " " + thread.getName());
+            Log.print("Deteniendo " + type + " " + thread.getName());
             obj.stopThread();
             thread.interrupt();
         }
@@ -73,5 +80,35 @@ public class SimulationController {
 
     public void setOrderQueueLimit(int amount) { orderQueue.setCapacity(amount); }
     public void setDeliveryAreaLimit(int amount) { deliveryArea.setCapacity(amount); }
+
+    public void setView(SimulationView view) { this.view = view; }
+
+    public void onOrderCreated(int orderId) { if(view != null) { view.addOrderToQueue(orderId); } }
+
+    public void onOrderCooking(int orderId) { if(view != null) { view.moveOrderToChef(orderId); } }
+
+    public void onOrderReady(int orderId) { if(view != null) { view.moveOrderToDelivery(orderId); } }
+
+    public void onOrderDelivered(int orderId) { if(view != null) { view.deliverOrder(orderId); } }
+
+    public int getClientCount() {
+        return clients.size();
+    }
+
+    public int getChefCount() {
+        return chefs.size();
+    }
+
+    public int getWaiterCount() {
+        return waiters.size();
+    }
+
+    public int getMinArrival() { return minArrival; }
+    public int getMaxArrival() { return maxArrival; }
+
+    public void setArrivalRate(int min, int max) {
+        minArrival = min;
+        maxArrival = max;
+    }
 
 }

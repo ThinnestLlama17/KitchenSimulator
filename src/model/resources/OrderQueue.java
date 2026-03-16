@@ -14,17 +14,22 @@ public class OrderQueue {
         this.queue = new LinkedBlockingQueue<>();
     }
 
-    public void addOrder(Order order) throws InterruptedException {
+    public synchronized void addOrder(Order order) throws InterruptedException {
         while (queue.size() >= limit) {
-            Thread.sleep(50);
+            wait();
         }
-        queue.put(order); // Se bloquea al llenarse, segura para concurrencia
+        queue.add(order); // Se bloquea al llenarse, segura para concurrencia
         Log.print("Pedido " + order.getId() + " agregado a la cola");
+        notifyAll();
     }
 
-    public Order takeOrder() throws InterruptedException {
-        Order order = queue.take(); // Se bloquea al vaciarse, segura para concurrencia
+    public synchronized Order takeOrder() throws InterruptedException {
+        while (queue.isEmpty()) {
+            wait();
+        }
+        Order order = queue.poll(); // Se bloquea al vaciarse, segura para concurrencia
         Log.print("Pedido " + order.getId() + " retirado de la cola");
+        notifyAll();
         return order;
     }
 
@@ -34,7 +39,8 @@ public class OrderQueue {
 
     public synchronized void setCapacity(int newLimit) {
             limit = newLimit;
-            Log.print("Limite de cola aumentado a " + limit);
+            Log.print("Limite de cola puesto en " + limit);
+            notifyAll();
     }
 
     public int getLimit() { return limit; }
