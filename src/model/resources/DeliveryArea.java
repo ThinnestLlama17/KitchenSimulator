@@ -32,18 +32,9 @@ public class DeliveryArea {
         return deliveryQueue.size();
     }
 
-    public synchronized void increaseCapacity(int newLimit) {
-        if (newLimit > limit) {
-            limit = newLimit;
-            Log.print("Limite de cola aumentado a " + limit);
-        }
-    }
-
-    public synchronized void decreaseCapacity(int newLimit) {
-        if (newLimit < limit) {
-            limit = newLimit;
-            Log.print("Limite de cola ajustado a " + limit);
-        }
+    public synchronized void setCapacity(int newLimit) {
+        limit = newLimit;
+        Log.print("Limite de cola aumentado a " + limit);
     }
 
     public int getLimit() { return limit; }

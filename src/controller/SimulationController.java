@@ -71,9 +71,7 @@ public class SimulationController {
         }
     }
 
-    public void increaseOrderQueueLimit(int amount) { orderQueue.increaseCapacity(amount); }
-    public void decreaseOrderQueueLimit(int amount) { orderQueue.decreaseCapacity(amount); }
-    public void increaseDeliveryAreaLimit(int amount) { deliveryArea.increaseCapacity(amount); }
-    public void decreaseDeliveryAreaLimit(int amount) { deliveryArea.decreaseCapacity(amount); }
+    public void setOrderQueueLimit(int amount) { orderQueue.setCapacity(amount); }
+    public void setDeliveryAreaLimit(int amount) { deliveryArea.setCapacity(amount); }
 
 }
